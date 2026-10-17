@@ -1,27 +1,59 @@
 import { useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { loginUser } from "../api/login.ts";
+import { refreshUser } from "../api/refresh.ts";
 import "../styling/Login.css";
+
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [checking,setChecking] = useState(true)
   const navigate = useNavigate();
+
+  useEffect(() =>{
+    const tryRefresh = async () =>{
+      const refreshToken = localStorage.getItem('refreshtoken')
+      if(!refreshToken){
+        setChecking(false)
+        return
+      }
+      try {
+        const {token} = await refreshUser();
+        if(!token){
+          localStorage.removeItem('refreshtoken')
+          setChecking(false)
+          return
+        }
+        localStorage.setItem('token',token)
+        navigate('/pastebin')
+      } catch  {
+        localStorage.removeItem('refreshtoken')
+        setError('Session expired')
+        setChecking(false)
+      }
+    }
+    tryRefresh()
+  },[navigate]) 
+
+  if (checking) return <p>Loading...</p>;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
     setLoading(true);
     try {
-      const { token } = await loginUser({ username, password });
-      localStorage.setItem("token", token);
-      navigate("/pastebin");
+      const { token , refresh} = await loginUser({ username, password });
+      localStorage.setItem("token", token)
+      localStorage.setItem("refreshtoken", refresh)
+      navigate("/pastebin")
     } catch {
-      setError("Couldn't sign in. Check your username and password, then try again.");
+      setError("Couldn't sign in. Check your username and password, then try again.")
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
   };
 
