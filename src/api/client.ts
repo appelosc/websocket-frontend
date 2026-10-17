@@ -5,7 +5,7 @@ export async function api<T>(base: string, path: string, options: RequestInit = 
             ...options,
             headers: {
                 "Content-Type": "application/json",
-                ...(token && {Authorization: `Bearer: ${token}`} ),
+                ...(token && {Authorization: `Bearer ${token}`} ),
                 ...options.headers
             }
         })
