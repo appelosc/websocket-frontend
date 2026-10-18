@@ -18,6 +18,32 @@
   gap: 0.75rem;
 }
 
+.paste-titlebar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.paste-logout {
+  font: 500 0.875rem/1 var(--sans);
+  color: var(--carbon);
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 0.6rem 0.85rem;
+  cursor: pointer;
+}
+
+.paste-logout:hover {
+  border-color: var(--carbon-soft);
+}
+
+.paste-logout:focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: 2px;
+}
+
 .paste-title {
   font-size: 2.75rem;
   font-weight: 700;

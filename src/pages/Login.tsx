@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { loginUser } from "../api/login.ts";
 import { refreshUser } from "../api/refresh.ts";
+import { clearSession } from "../api/session.ts";
 import "../styling/Login.css";
 
 
@@ -23,15 +24,10 @@ function Login() {
       }
       try {
         const {token} = await refreshUser();
-        if(!token){
-          localStorage.removeItem('refreshtoken')
-          setChecking(false)
-          return
-        }
         localStorage.setItem('token',token)
         navigate('/pastebin')
       } catch  {
-        localStorage.removeItem('refreshtoken')
+        clearSession()
         setError('Session expired')
         setChecking(false)
       }
