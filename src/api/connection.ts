@@ -46,8 +46,7 @@ function refreshToken(): Promise<string> {
   return refreshPromise;
 }
 
-// Disconnects first: with HashRouter the redirect is a hash change, not a page
-// reload, so the socket would otherwise stay connected as the previous user.
+
 export function logout() {
   socket.disconnect();
   clearSession();
